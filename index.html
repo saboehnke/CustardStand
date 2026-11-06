@@ -1059,9 +1059,18 @@
 
 <script>
   // ─────────────────────────────────────────
-  // CLOSED FOR THE SEASON — flip this to toggle
-  const CLOSED_FOR_SEASON = false;
+  // CLOSED FOR THE SEASON — banner shows automatically outside the season.
+  // Season dates are inclusive (month is 1–12).
+  const SEASON_OPEN  = { month: 4,  day: 1  };
+  const SEASON_CLOSE = { month: 10, day: 31 };
+  // Manual override: null = use dates, true = force closed, false = force open
+  const CLOSED_OVERRIDE = null;
   // ─────────────────────────────────────────
+  const today = new Date();
+  const todayKey = (today.getMonth() + 1) * 100 + today.getDate();
+  const inSeason = todayKey >= SEASON_OPEN.month * 100 + SEASON_OPEN.day &&
+                   todayKey <= SEASON_CLOSE.month * 100 + SEASON_CLOSE.day;
+  const CLOSED_FOR_SEASON = CLOSED_OVERRIDE ?? !inSeason;
   if (CLOSED_FOR_SEASON) {
     document.querySelector('.hours-card-wrap').classList.add('is-closed');
   }
